@@ -1,2 +1,2 @@
 *.class
-*.pyc
+./sortings/__pycache__/*.pyc
