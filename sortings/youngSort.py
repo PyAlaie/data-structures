@@ -11,7 +11,7 @@ def divide_to_rc(n):
     return row, col
 
 # Young table with row major array
-class row_pic():
+class RowPictureYoungTable():
     def __init__(self, init_array, row, column):
         self.array = init_array
         self.row = row
@@ -37,8 +37,15 @@ class row_pic():
     def __str__(self):
         result = ""
         for i in range(self.row):
+            flag = True
             for j in range(self.column):
-                result += str(self.get_at(i, j)) + ","
+                
+                if flag:
+                    result += "%3s"%str(self.get_at(i, j))
+                    flag = False
+                else:
+                    result += ", %3s"%str(self.get_at(i, j))
+                    
             result += "\n"
         return result
 
@@ -94,3 +101,19 @@ class row_pic():
             
                 # sift down 0,0
                 self.sort_sift_down(0,0)
+                
+if __name__ == '__main__':
+    
+    import randArrGen
+    
+    random_array = randArrGen.random_list(25, 0, 100)
+    
+    print("Before:", random_array)
+    
+    young_table = RowPictureYoungTable(random_array, 5, 5)
+    
+    young_table.BuildYoungTable()
+    young_table.young_sort()
+    
+    print("After: ", young_table.array)
+    
