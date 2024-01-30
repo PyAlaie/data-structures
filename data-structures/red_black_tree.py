@@ -132,20 +132,77 @@ class RBTree:
         if v != T.nil: 
             v.p = u.p 
 
+    def rb_delete_fixup(T, x):
+        while x != T.root and not x.is_red:
+            if x == x.p.l:
+                s = x.p.r
+                if s.is_red:
+                    s.is_red = False
+                    x.p.is_red = True
+                    RBTree.left_rotate(T, x.p)
+                    s = x.p.r
+                if not s.l.is_red and not s.r.is_red:
+                    s.is_red = True
+                    x = x.p
+                else:
+                    if not s.r.is_red:
+                        s.l.is_red = False
+                        s.is_red = True
+                        RBTree.right_rotate(T, s)
+                        s = x.p.r
+                    s.is_red = x.p.is_red
+                    x.p.is_red = False
+                    s.r.is_red = False
+                    RBTree.left_rotate(T, x.p)
+                    x = T.root
+            else:
+                s = x.p.l
+                if s.is_red:
+                    s.is_red = False
+                    x.p.is_red = True
+                    RBTree.right_rotate(T, x.p)
+                    s = x.p.l
+                if not s.l.is_red and not s.r.is_red:
+                    s.is_red = True
+                    x = x.p
+                else:
+                    if not s.l.is_red:
+                        s.r.is_red = False
+                        s.is_red = True
+                        RBTree.left_rotate(T, s)
+                        s = x.p.l
+                    s.is_red = x.p.is_red
+                    x.p.is_red = False
+                    s.l.is_red = False
+                    RBTree.right_rotate(T, x.p)
+                    x = T.root
+        x.is_red = False
+
     def tree_delete(T, z):
+        y = z
+        y_original_color = y.is_red
         if z.l == T.nil:
+            x = z.r
             T.transplant(z, z.r)
         elif z.r == T.nil:
+            x = z.l
             T.transplant(z, z.l)
         else:
-            y = RBTree.tree_successor(z)
-            if y != z.r:
+            y = RBTree.tree_min(z.r)
+            y_original_color = y.is_red
+            x = y.r
+            if y.p == z:
+                x.p = y
+            else:
                 T.transplant(y, y.r)
                 y.r = z.r
-                z.r.p = y
+                y.r.p = y
             T.transplant(z, y)
             y.l = z.l
-            z.l.p = y
+            y.l.p = y
+            y.is_red = z.is_red
+        if not y_original_color:
+            T.rb_delete_fixup(x)
 
     @staticmethod
     def left_rotate(T, x):
