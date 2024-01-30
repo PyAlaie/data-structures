@@ -108,9 +108,9 @@ class LinkedList:
     
     
 if __name__ == '__main__':
-    import randArrGen
+    import rand_arr_gen
     
-    random_array = randArrGen.random_list(10,0,50)
+    random_array = rand_arr_gen.random_list(10,0,50)
     
     linked_list = LinkedList()
     for i in random_array:
