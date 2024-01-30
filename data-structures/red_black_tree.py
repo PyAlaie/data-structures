@@ -1,5 +1,5 @@
 class RBNode:
-    def __init__(node, key, value, nil) -> T.nil:
+    def __init__(node, key, value, nil):
         node.p = nil
         node.l = nil
         node.r = nil
