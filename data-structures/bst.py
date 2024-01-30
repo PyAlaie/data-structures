@@ -126,3 +126,34 @@ class BST:
                 z.p.l = None
             else:
                 z.p.r = None
+
+    def left_rotate(T, x):
+        y = x.r
+        x.r = y.l
+        if y.l:
+            y.l.p = x
+        y.p = x.p
+        if x.p == None:
+            T.root = y
+        elif x.p.l == x:
+            x.p.l = y
+        else:
+            x.p.r = y
+        y.l = x
+        x.p = y
+        
+
+    def right_rotate(T, x):
+        y = x.l
+        x.l = y.r
+        if y.r:
+            y.r.p = x
+        y.p = x.p
+        if x.p == None:
+            T.root = y
+        elif x.p.l == x:
+            x.p.l = y
+        else:
+            x.p.r = y
+        y.r = x
+        x.p = y
