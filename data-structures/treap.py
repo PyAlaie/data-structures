@@ -36,7 +36,7 @@ class Treap:
     
     def tree_search(T, key):
         x = T.root
-        while x.key != key:
+        while x != None and x.key != key:
             if key < x.key: x = x.l
             else: x = x.r
         return x
@@ -78,7 +78,7 @@ class Treap:
                     T.right_rotate(z.p)
                 else:
                     T.left_rotate(z.p)
-        T.treap_fixup(z)
+                T.treap_fixup(z)
         
     def tree_insert(T, z):
         x = T.root
@@ -119,27 +119,6 @@ class Treap:
             y.l = z.l
             z.l.p = y
 
-    def tree_delete_second_approach(T, z):
-        if z.l != None:
-            y = Treap.tree_predecessor(z)
-            temp = z
-            z.key, z.value = y.key, y.value
-            y.key, y.value = temp.key, temp.value
-            T.tree_delete(y)
-        elif z.r != None:
-            y = Treap.tree_successor(z)
-            temp = z
-            z.key, z.value = y.key, y.value
-            y.key, y.value = temp.key, temp.value
-            T.tree_delete(y)
-        else:
-            if z.p == None:
-                T.root = None
-            elif z.p.l == z:
-                z.p.l = None
-            else:
-                z.p.r = None
-
     def left_rotate(T, x):
         y = x.r
         x.r = y.l
@@ -169,3 +148,30 @@ class Treap:
             x.p.r = y
         y.r = x
         x.p = y
+
+# TREAP - MAIN
+T = Treap()
+for i in range(5, 16):
+    # Checking insertion
+    T.tree_insert(TreapNode(key= i, value= i))
+
+# Checking preorder walk
+print(f"pre order traversal of the tree after inserting keys from range 1 to 10: {T.preorder_walk(T.root)}")
+
+# Checking Min and Max
+print(f"Min of the tree: {T.tree_min(T.root)}, Max of the tree: {T.tree_max(T.root)}")
+
+# Checking Search, Predecessor, Successor
+node = T.tree_search(5.5)
+if node != None: print("5.5 exists in the tree")
+else: print("5.5 doesn't exist in the tree")
+
+node = T.tree_search(6)
+if node != None: 
+    print("6 exists in the tree")
+    print(f"predecessor of 6: {Treap.tree_predecessor(node)}, successor of 6: {Treap.tree_successor(node)}")
+else: print("6 doesn't exist in the tree")
+
+# Checking Delete, Rotations, Transplant, Fixup
+T.tree_delete_first_approach(node)
+print(f"inorder traversal of the tree after deletion of 6: {T.inorder_walk(T.root)}") 
