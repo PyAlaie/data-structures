@@ -1,6 +1,3 @@
-from traitlets import TraitError
-
-
 class RBNode:
     def __init__(node, key, value, nil) -> T.nil:
         node.p = nil
