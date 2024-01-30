@@ -1,31 +1,34 @@
-class BSTNode:
+import random
+
+class TreapNode:
     def __init__(node, key, value) -> None:
         node.p = None
         node.l = None
         node.r = None
         node.key = key
         node.value = value
+        node.priority = random.randint(0, 10 ** 8)
 
     def __str__(node) -> str:
-        return f"node: [key: {node.key}, value: {node.value}]"
+        return f"node: [key: {node.key}, value: {node.value}, priority: {node.priority}]"
     
-class BST:
+class Treap:
     def __init__(T):
         T.root = None
 
-    def preorder_walk(T, x: BSTNode):
+    def preorder_walk(T, x: TreapNode):
         if x != None:
             print(x)
             T.preorder_walk(x.l) # recursive call on the left
             T.preorder_walk(x.r) # recursive call on the right
 
-    def inorder_walk(T, x: BSTNode):
+    def inorder_walk(T, x: TreapNode):
         if x != None:
             T.inorder_walk(x.l) # recursive call on the left
             print(x)
             T.inorder_walk(x.r) # recursive call on the right
 
-    def postorder_walk(T, x: BSTNode):
+    def postorder_walk(T, x: TreapNode):
         if x != None:
             T.postorder_walk(x.l) # recursive call on the left
             T.postorder_walk(x.r) # recursive call on the right
@@ -39,34 +42,43 @@ class BST:
         return x
     
     @staticmethod
-    def tree_min(x: BSTNode):
+    def tree_min(x: TreapNode):
         while x.l != None:
             x = x.l
         return x
 
     @staticmethod
-    def tree_max(x: BSTNode):
+    def tree_max(x: TreapNode):
         while x.r != None:
             x = x.r
         return x
     
     @staticmethod
-    def tree_successor(x: BSTNode):
+    def tree_successor(x: TreapNode):
         if x.r != None:
-            return BST.tree_min(x.r)
+            return Treap.tree_min(x.r)
         else:
             while x.p != None and x == x.p.r:
                 x = x.p
             return x.p
         
     @staticmethod
-    def tree_predecessor(x: BSTNode):
+    def tree_predecessor(x: TreapNode):
         if x.l != None:
-            return BST.tree_max(x.l)
+            return Treap.tree_max(x.l)
         else:
             while x.p != None and x == x.p.l:
                 x = x.p
             return x.p    
+        
+    def treap_fixup(T, z):
+        if z.p != None:
+            if z.priority > z.p.priority:
+                if z == z.p.l:
+                    T.right_rotate(z.p)
+                else:
+                    T.left_rotate(z.p)
+        T.treap_fixup(z)
         
     def tree_insert(T, z):
         x = T.root
@@ -80,6 +92,7 @@ class BST:
         elif z.key <= y.key: y.l = z
         else: y.r = z
         z.p = y
+        T.treap_fixup(z)
 
     def transplant(T, u, v):
         if u.p == None: 
@@ -97,7 +110,7 @@ class BST:
         elif z.r == None:
             T.transplant(z, z.l)
         else:
-            y = BST.tree_successor(z)
+            y = Treap.tree_successor(z)
             if y != z.r:
                 T.transplant(y, y.r)
                 y.r = z.r
@@ -108,13 +121,13 @@ class BST:
 
     def tree_delete_second_approach(T, z):
         if z.l != None:
-            y = BST.tree_predecessor(z)
+            y = Treap.tree_predecessor(z)
             temp = z
             z.key, z.value = y.key, y.value
             y.key, y.value = temp.key, temp.value
             T.tree_delete(y)
         elif z.r != None:
-            y = BST.tree_successor(z)
+            y = Treap.tree_successor(z)
             temp = z
             z.key, z.value = y.key, y.value
             y.key, y.value = temp.key, temp.value
@@ -142,7 +155,6 @@ class BST:
         y.l = x
         x.p = y
         
-
     def right_rotate(T, x):
         y = x.l
         x.l = y.r
