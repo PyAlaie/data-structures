@@ -10,7 +10,7 @@ class TreapNode:
         node.priority = random.randint(0, 10 ** 8)
 
     def __str__(node) -> str:
-        return f"node: [key: {node.key}, value: {node.value}, priority: {node.priority}]"
+        return f"node -> key: {node.key}, value: {node.value}, priority: {node.priority}"
     
 class Treap:
     def __init__(T):
