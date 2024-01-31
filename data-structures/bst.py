@@ -7,7 +7,7 @@ class BSTNode:
         node.value = value
 
     def __str__(node) -> str:
-        return f"node: [key: {node.key}, value: {node.value}]"
+        return f"node -> key: {node.key}, value: {node.value}"
     
 class BST:
     def __init__(T):
@@ -33,7 +33,7 @@ class BST:
     
     def tree_search(T, key):
         x = T.root
-        while x.key != key:
+        while x != None and x.key != key:
             if key < x.key: x = x.l
             else: x = x.r
         return x
@@ -157,3 +157,30 @@ class BST:
             x.p.r = y
         y.r = x
         x.p = y
+
+# BINARY SEARCH TREE - MAIN
+T = BST()
+for i in range(1, 11):
+    # Checking insertion
+    T.tree_insert(BSTNode(key= i, value= i))
+
+# Checking preorder walk
+print(f"pre order traversal of the tree after inserting keys from range 1 to 10: {T.preorder_walk(T.root)}")
+
+# Checking Min and Max
+print(f"Min of the tree: {T.tree_min(T.root)}, Max of the tree: {T.tree_max(T.root)}")
+
+# Checking Search, Predecessor, Successor
+node = T.tree_search(5.5)
+if node != None: print("5.5 exists in the tree")
+else: print("5.5 doesn't exist in the tree")
+
+node = T.tree_search(6)
+if node != None: 
+    print("6 exists in the tree")
+    print(f"predecessor of 6: {BST.tree_predecessor(node)}, successor of 6: {BST.tree_successor(node)}")
+else: print("6 doesn't exist in the tree")
+
+# Checking Delete, Rotations, Transplant
+T.tree_delete_first_approach(node)
+print(f"inorder traversal of the tree after deletion of 6: {T.inorder_walk(T.root)}") 
